@@ -39,7 +39,8 @@ func (m multiReader) Read(ctx context.Context, loc Location) ([]byte, error) {
 
 	r := registry[p[1]]
 	if r == nil {
-		return nil, fmt.Errorf("cannot call Read for a location on Medium: %v is not registered", p[1])
+		log.Println(registry)
+		return nil, fmt.Errorf("cannot call Read for a location: %v is not registered", p[1])
 	}
 
 	return r.Read(ctx, Location{filepath.Clean(strings.Join(p[2:], "/"))})

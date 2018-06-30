@@ -4,7 +4,7 @@ import (
 	"context"
 	"flag"
 
-	"mdoc/display/http"
+	"github.com/johnsiilver/m_doc/display/http"
 )
 
 var (

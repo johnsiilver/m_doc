@@ -3,8 +3,10 @@ package storage
 import (
 	"context"
 	"fmt"
-	"io"
+	"io/ioutil"
+	"log"
 	"net/http"
+	"net/url"
 	"path"
 	"strings"
 	"time"
@@ -13,7 +15,7 @@ import (
 func init() {
 	cl := http.Client{Timeout: 10 * time.Second}
 
-	register("github://", githubReader{client: cl})
+	register("github", githubReader{client: cl})
 }
 
 type githubReader struct {
@@ -29,15 +31,37 @@ func (g githubReader) Read(ctx context.Context, loc Location) ([]byte, error) {
 	user, proj := p[0], p[1]
 	projPath := strings.Join(p[2:], "/")
 
-	r, err := g.client.Get(path.Join("http://raw.githubusercontent.com/", user, proj, "master", projPath, "mdoc"))
+	u, err := urlJoin(user, proj, "master", projPath)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Println("github fetch: ", u)
+	r, err := g.client.Get(u)
 	if err != nil {
 		return nil, fmt.Errorf("probably getting the github page: %s", err)
 	}
+	defer r.Body.Close()
 
-	b := []byte{}
-	_, err = io.ReadFull(r.Body, b)
+	b, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		return nil, fmt.Errorf("problem reading the response from github: %s", err)
 	}
+	if len(b) == 0 {
+		return nil, fmt.Errorf("no content at: %s", u)
+	}
 	return b, nil
+}
+
+func urlJoin(p ...string) (string, error) {
+	j := path.Join(p...)
+	u, err := url.Parse(j)
+	if err != nil {
+		return "", err
+	}
+	base, err := url.Parse("https://raw.githubusercontent.com/")
+	if err != nil {
+		return "", err
+	}
+	return base.ResolveReference(u).String(), nil
 }

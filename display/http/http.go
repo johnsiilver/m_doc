@@ -9,8 +9,6 @@ import (
 	"html/template"
 	"io/ioutil"
 	"log"
-	"mdoc/display/meta"
-	"mdoc/display/storage"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -18,6 +16,9 @@ import (
 	"strings"
 	"sync"
 	"time"
+
+	"github.com/johnsiilver/m_doc/display/meta"
+	"github.com/johnsiilver/m_doc/display/storage"
 
 	blackfriday "gopkg.in/russross/blackfriday.v2"
 )
@@ -207,6 +208,7 @@ func (s *Server) getMetaData(ctx context.Context, loc storage.Location) (meta.Da
 	if err != nil {
 		return d, fmt.Errorf("could not find metafile at: %s: %s", loc.Path, err)
 	}
+	log.Println("Raw metadata file:\n", string(b))
 
 	err = d.UnmarshalYAML(b)
 	return d, err
