@@ -1,0 +1,56 @@
+# Introduction
+MDOC is a system that combines the
+[markdown](https://en.wikipedia.org/wiki/Markdown) language with our internal
+[git](https://git-scm.com/) repositories to enable more frequent documentation
+that is easily locatable and searchable.
+
+# What Documentation Problems?
+MDOC is trying to solve service documentation problems.
+
+It is not trying to solve code documentation problems.
+
+# The Problem with Documentation
+Documentation has a few key problems within any organization.
+
+* Writing documentation
+* Searching for documentation
+* Updating design/client documentation as code changes
+* Metrics around documentation quality tied to a code base
+
+There is no magic bullet for solving these issues.  But there are a few key
+enablers that can assist with making this easier:
+
+* Move documentation closer to the code
+* Track code changes and documentation changes together
+* Use a simple, well defined and open documentation format
+
+## Move documentation closer to the code
+Moving the documentation closer to the code and within a version control system
+encourages the user to update the docs.  With large changes, it encourages the
+reviewer to also insist on an update to documentation.
+
+This is also not a magic bullet, as coding culture drives documentation.
+However, this often causes the user to make a conscious decision to update or
+not update the documentation.  Documentation in a wiki, word document, or
+web portal (sharepoint) exists as separate entities that are easier to ignore.
+
+## Track code changes and documentation changes together
+By leveraging the version control system, it is possible to write
+internal tooling that can track the likelihood of design documentation moving
+out of date.
+
+This allows an organization that is serious about documentation to track
+progress and spawn semester objectives to fix documentation problems.
+
+This also allows for easier to locate documentation without the need for
+tooling.  Where is the documentation for the inventory scanner?  If you
+know where the git repository is, you know where the documentation is.
+
+We can leverage this in future tooling.
+
+## Use a simple, well defined and open documentation format
+By utilizing a simple, well defined and open format it because trivial to
+create search indexes.
+
+More complex documentation (web portals, word documents) have more complex
+search requirements and may have more complex security concerns to overcome.

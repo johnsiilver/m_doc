@@ -1,0 +1,11 @@
+name: MDOC
+style: base
+links:
+- name: Writing A Document
+  url: guides/writing.mdoc
+- name: Creating A Style
+  url: guides/styles.mdoc
+- name: Owners
+  url: owners/owners.mdoc
+- name: Authors
+  url: authors/authors.mdoc

@@ -1,0 +1,123 @@
+# Creating a Style
+
+## What is a style?
+MDOC comes with a single base style.  At the moment, that style must be
+distributed with the release.
+
+The style is a combination of a Go language [template](https://golang.org/pkg/text/template/)
+and a CSS markup file.
+
+These files will determine how the page lays out and how the markdown is
+rendered.
+
+## Style location
+To create a style, a user needs to provide a style directory in our distribution
+directory:
+
+```mdoc/display/styles/<your style>```
+
+In this directory, you must include the following files:
+
+```
+mdoc/display/styles/<your style>/<your style>.css
+mdoc/display/styles/<your style>/<your style>.gotmpl
+```
+
+If your style was called "base", this would be:
+
+```
+mdoc/display/styles/base/base.css
+mdoc/display/styles/base/base.gotmpl
+```
+
+## Template information
+This guide will not cover how to do a Go template, you will need to read the
+go language guide for templates [here](https://golang.org/pkg/text/template/).
+
+However, the go template is passed a data object that can be used to provide
+information within the pages and to render the page markdown.
+
+Here is a list of fields that can be used:
+
+Root object, available at "."
+```
+// Passthru contains information used in the rendering of an mdoc page.
+type Passthru struct {
+	// Meta contains information from the site's meta file.
+	Meta meta.Data
+	// Home is the root URL of the mdoc.
+	Home string
+	// Auth contains authorization information.
+	Auth Auth // TODO(jdoak): Replace with Oath stuff.
+	// Markdown contains the markdown to render on the page.
+	Markdown template.HTML
+}
+```
+
+Meta object, available at ".Meta"
+```
+// Data is used to describe metadata about the markdown documents.
+type Data struct {
+	// Name sets the banner for all sub documents.
+	Name string
+	// Style is the name of the style that you want to use.  If not set the "base" style is used.
+	Style string
+	// Links are a clickable link.
+	Links []Link
+}
+```
+
+Link object, available at ".Meta.Links".
+```
+// Link describes a link that is used in the banner/sidebar/
+type Link struct {
+	// Name is the name to display.
+	Name string
+	// URL is the link.
+	URL string
+}
+```
+
+Auth object, available at ".Auth".
+```
+type Auth struct {
+	// User is the user name of the user navigating the page.
+	User string
+}
+```
+
+## Example Go Template
+
+This is the example Go template that is used to render this site.
+It uses the fields and data objects listed above.
+```
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/styles/base/base.css">
+    </head>
+
+    <body>
+        <section id="banner">
+            <span id="title" class="whiteText">{{.Meta.Name}}</span>
+                <span id="userLinks" class="whiteText">
+                    <a href="{{.Home}}">Home</a>|
+                    {{$Home := .Home}}
+                    {{range $i, $l := .Meta.Links}}
+                    <a href="{{$Home}}{{$l.URL}}">{{$l.Name}}</a>
+                    {{- if len $.Meta.Links| sub 1 | eq $i | not -}}|
+                    {{- end -}}
+                    {{- end -}}
+                </span>
+            <span id="bannerLinks" class="whiteText">
+                <a target="_blank" href="http://who/is/{{.Auth.User}}">{{.Auth.User}}</a>|
+                <a href="">Docs</a>|
+                <a href="">Bugs</a>
+            </span>
+        </section>
+
+        <div id="markdown">
+            {{.Markdown}}
+        </div>
+    </body>
+</html>
+```

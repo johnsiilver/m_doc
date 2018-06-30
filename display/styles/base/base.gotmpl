@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="/styles/base/base.css">
+    </head>
+
+    <body>
+        <section id="banner">
+            <span id="title" class="whiteText">{{.Meta.Name}}</span>
+                <span id="userLinks" class="whiteText">
+                    <a href="{{.Home}}">Home</a>|
+                    {{$Home := .Home}}
+                    {{range $i, $l := .Meta.Links}}
+                    <a href="{{$Home}}{{$l.URL}}">{{$l.Name}}</a>
+                    {{- if len $.Meta.Links| sub 1 | eq $i | not -}}|
+                    {{- end -}}
+                    {{- end -}}
+                </span>
+            <span id="bannerLinks" class="whiteText">
+                <a target="_blank" href="http://who/is/{{.Auth.User}}">{{.Auth.User}}</a>|
+                <a href="">Docs</a>|
+                <a href="">Bugs</a>
+            </span>
+        </section>
+
+        <div id="markdown">
+            {{.Markdown}}
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+# Writing a mdoc - Essentials
+
+## Create a mdoc/ directory at the root of a Git project
+Simply create a mdoc/ directory at the root of your Git project.
+
+## Add the Meta file
+The meta file, which exists at "mdoc/meta" contains metadata that is used to
+setup your site.
+
+This file is written in YAML format and provides the following:
+
+* Name of the site, which is used in the site banner
+* The site style that will be used. "base" is the default style
+* Banner links that will be included
+* Menus that will be setup in the banner (future)
+
+Here is an example meta file that is used for this site:
+
+```
+name: MDOC
+style: base
+links:
+- name: Writing A Document
+  url: guides/writing.mdoc
+- name: Creating A Style
+  url: guides/styles.mdoc
+- name: Owners
+  url: owners/owners.mdoc
+- name: Authors
+  url: authors/authors.mdoc
+```
+
+## Add an index file as the main landing page
+Add a file, mdoc/index.mdoc .  This page is written in markdown format and will
+contain the landing page when people navigate to your page.
