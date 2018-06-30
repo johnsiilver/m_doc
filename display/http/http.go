@@ -11,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"strings"
@@ -146,7 +147,7 @@ func (s *Server) display(w http.ResponseWriter, r *http.Request) {
 	}
 	sp := strings.SplitAfter(r.URL.Path, "mdoc/")
 
-	metaData, err := s.getMetaData(r.Context(), storage.Location{filepath.Join(sp[0], metaFile)})
+	metaData, err := s.getMetaData(r.Context(), storage.Location{path.Join(sp[0], metaFile)})
 	if err != nil {
 		http.Error(w, fmt.Sprintf("had problem locating meta file: %s", err), http.StatusInternalServerError)
 		return

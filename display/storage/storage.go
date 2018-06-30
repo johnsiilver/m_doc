@@ -5,7 +5,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"path/filepath"
 	"strings"
 )
 
@@ -43,7 +42,7 @@ func (m multiReader) Read(ctx context.Context, loc Location) ([]byte, error) {
 		return nil, fmt.Errorf("cannot call Read for a location: %v is not registered", p[1])
 	}
 
-	return r.Read(ctx, Location{filepath.Clean(strings.Join(p[2:], "/"))})
+	return r.Read(ctx, Location{strings.Join(p[2:], "/")})
 }
 
 var registry = map[string]Reader{}
